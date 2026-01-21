@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 
 from datetime import datetime, timedelta
-from utils.sheet import carregar_planilha
+from utils.sheets import carregar_planilha
 def render_principal():
     # Cabeçalho com Estilo
     st.title("⚽ Central 100Cueca FC")

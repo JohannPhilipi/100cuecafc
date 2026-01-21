@@ -1,7 +1,7 @@
 import streamlit as st
 
 import plotly.express as px
-from utils.sheet import carregar_planilha
+from utils.sheets import carregar_planilha
 
 
 def render_elenco():
