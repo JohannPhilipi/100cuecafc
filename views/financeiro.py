@@ -116,7 +116,7 @@ def render_financeiro():
         col_t1, col_t2 = st.columns([3, 1])
         with col_t1:
             st.write(
-                f"**🥳 Termómetro da Festa de Final de Ano ({ano_sel}) | Meta: R$ {META_FESTA:,.0f}**"
+                f"**🥳 Termómetro da Festa de Final de Ano ({ano_sel}) | Meta: R$ {META_FESTA}**"
             )
             st.progress(progresso)
         with col_t2:
