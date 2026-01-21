@@ -1,6 +1,6 @@
 import streamlit as st
 
-from utils.sheet import carregar_planilha
+from utils.sheets import carregar_planilha
 
 def render_estatisticas():
     st.title("📊 Estatísticas - 100Cueca")
