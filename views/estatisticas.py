@@ -2,6 +2,7 @@ import streamlit as st
 
 from utils.sheets import carregar_planilha
 
+
 def render_estatisticas():
     st.title("📊 Estatísticas - 100Cueca")
 
@@ -34,33 +35,50 @@ def render_estatisticas():
 
     jogos_serie = df_jogos[df_jogos["Serie_id"] == serie_sel]
 
-    vitorias_roxo = (jogos_serie["Vencedor"] == "Roxo").sum()
-    vitorias_amarelo = (jogos_serie["Vencedor"] == "Amarelo").sum()
+    vitorias_roxo = (jogos_serie["Vencedor"] == "Time A").sum()
+    vitorias_amarelo = (jogos_serie["Vencedor"] == "Time B").sum()
 
     c1, c2, c3 = st.columns([2, 1, 2])
 
     with c1:
         st.markdown(
-            "<h2 style='text-align:center;color:#8a2be2;'>🟪 TIME ROXO</h2>",
-            unsafe_allow_html=True
+            "<h2 style='text-align:center;'>TIME 🅰️</h2>",
+            unsafe_allow_html=True,
         )
-        st.markdown(f"<h1 style='text-align:center;'>{vitorias_roxo}</h1>", unsafe_allow_html=True)
+        st.markdown(
+            f"<h1 style='text-align:center;'>{vitorias_roxo}</h1>",
+            unsafe_allow_html=True,
+        )
 
     with c2:
-        st.markdown("<h1 style='text-align:center;padding-top:20px;'>VS</h1>", unsafe_allow_html=True)
+        st.markdown(
+            "<h1 style='text-align:center;padding-top:20px;'>VS</h1>",
+            unsafe_allow_html=True,
+        )
+        print()
         if vitorias_roxo > vitorias_amarelo:
-            st.success("Roxo na frente!")
+            if serie.get("Status") == "Encerrada":
+                st.success("Time A venceu!")
+            else:
+                st.success("Time A na frente!")
         elif vitorias_roxo < vitorias_amarelo:
-            st.warning("Amarelo na frente!")
+            if serie.get("Status") == "Encerrada":
+                st.success("Time B venceu!")
+            else:
+                st.warning("Time B na frente!")
+
         else:
             st.info("Série empatada!")
 
     with c3:
         st.markdown(
-            "<h2 style='text-align:center;color:#ffd700;'>🟨 TIME AMARELO</h2>",
-            unsafe_allow_html=True
+            "<h2 style='text-align:center;'>TIME 🅱️</h2>",
+            unsafe_allow_html=True,
         )
-        st.markdown(f"<h1 style='text-align:center;'>{vitorias_amarelo}</h1>", unsafe_allow_html=True)
+        st.markdown(
+            f"<h1 style='text-align:center;'>{vitorias_amarelo}</h1>",
+            unsafe_allow_html=True,
+        )
 
     # ======================
     # JOGOS DA SÉRIE
@@ -74,7 +92,7 @@ def render_estatisticas():
         df_view["Data"] = df_view["Data_dt"].dt.strftime("%d/%m/%Y")
         df_view = df_view.drop(columns=["Data_dt"])
 
-    colunas = ["Jogo", "Data", "Placar_roxo", "Placar_amarelo", "Vencedor"]
+    colunas = ["Jogo", "Data", "Time A", "Time B", "Vencedor"]
     colunas = [c for c in colunas if c in df_view.columns]
 
     st.dataframe(df_view[colunas], width="stretch", hide_index=True)
@@ -91,8 +109,7 @@ def render_estatisticas():
         st.info("Nenhum gol registrado nesta série.")
     else:
         artilharia = (
-            gols_serie
-            .groupby(["Jogador", "Time"], as_index=False)["Gols"]
+            gols_serie.groupby(["Jogador", "Time"], as_index=False)["Gols"]
             .sum()
             .sort_values("Gols", ascending=False)
         )
